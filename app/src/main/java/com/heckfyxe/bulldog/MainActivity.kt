@@ -1,13 +1,13 @@
 package com.heckfyxe.bulldog
 
 import android.Manifest
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import com.fondesa.kpermissions.extension.permissionsBuilder
+import com.fondesa.kpermissions.extension.send
+import com.fondesa.kpermissions.isGranted
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 
@@ -51,32 +51,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.RECORD_AUDIO
-            ) == PERMISSION_GRANTED
-        ) {
-            initAgoraEngineAndJoinChannel()
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.RECORD_AUDIO),
-                PERMISSION_REQ_ID_RECORD_AUDIO
-            )
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            PERMISSION_REQ_ID_RECORD_AUDIO -> {
-                if (grantResults.first() == PERMISSION_GRANTED)
-                    initAgoraEngineAndJoinChannel()
-            }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionsBuilder(Manifest.permission.RECORD_AUDIO).build().send {
+            if (it.first().isGranted())
+                initAgoraEngineAndJoinChannel()
         }
     }
 
