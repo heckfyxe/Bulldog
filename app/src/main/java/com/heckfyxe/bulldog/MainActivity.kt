@@ -11,8 +11,6 @@ import com.fondesa.kpermissions.isGranted
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 
-private const val PERMISSION_REQ_ID_RECORD_AUDIO: Int = 0
-
 class MainActivity : AppCompatActivity() {
     private var mRtcEngine: RtcEngine? = null
     private val mRtcEventHandler = object : IRtcEngineEventHandler() {
